@@ -10,6 +10,12 @@ export default class ButtonHapticsPlugin extends Plugin {
 			new TapTargetMatcher(),
 			detectHapticFeedback(window as unknown as HapticsHost),
 		);
-		this.registerDomEvent(document, "click", (event) => haptics.handleClick(event), { capture: true });
+		const capture = { capture: true };
+		const passive = { capture: true, passive: true };
+		this.registerDomEvent(document, "pointerdown", (event) => haptics.handlePointerDown(event), passive);
+		this.registerDomEvent(document, "pointermove", (event) => haptics.handlePointerMove(event), passive);
+		this.registerDomEvent(document, "pointerup", () => haptics.handlePointerEnd(), passive);
+		this.registerDomEvent(document, "pointercancel", () => haptics.handlePointerEnd(), passive);
+		this.registerDomEvent(document, "click", (event) => haptics.handleClick(event), capture);
 	}
 }
