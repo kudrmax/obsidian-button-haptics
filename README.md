@@ -7,7 +7,12 @@ Light haptic feedback when you tap interface controls in Obsidian on mobile.
 
 ## How it decides what vibrates
 
-One capture-phase `click` listener on the document. A tap vibrates when its target sits inside an interface control (`button`, `[role="button"]`, `.clickable-icon`, `.menu-item`, `.suggestion-item` and others in `src/domain/TapTargetMatcher.ts`) and is not disabled. Programmatic clicks are ignored, and so is the sidebar toggle, where Obsidian vibrates on its own.
+Capture-phase pointer and `click` listeners on the document, timed like native iOS:
+
+- Buttons and icons (`button`, `[role="button"]`, `.clickable-icon` and others) vibrate on touch-down.
+- Rows of menus and lists (`.menu-item`, `.suggestion-item` and others) vibrate after the finger rests still for 100 ms, or on release after a quicker tap. A touch that turns into a scroll stays silent.
+
+The selectors live in `src/domain/TapTargetMatcher.ts`. Disabled controls, programmatic clicks and the sidebar toggle, where Obsidian vibrates on its own, are ignored.
 
 ## Development
 
